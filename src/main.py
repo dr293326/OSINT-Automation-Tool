@@ -1,3 +1,5 @@
+import subprocess
+
 # This is a sample Python script.
 
 # Press Shift+F10 to execute it or replace it with your code.
@@ -11,6 +13,10 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    # print_hi('PyCharm')
+    # subprocess.run(["print_hi(\'PyCharm\')"])
+    # subprocess.run(["ls", "-l"])
+    # subprocess.run(["pwd"])
+    subprocess.run(["traceroute", "127.0.0.1"])
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
