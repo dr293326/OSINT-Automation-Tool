@@ -4,6 +4,7 @@ import subprocess
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from src.SystemToolsManager import exec_command
 
 
 def print_hi(name):
@@ -17,6 +18,7 @@ if __name__ == '__main__':
     # subprocess.run(["print_hi(\'PyCharm\')"])
     # subprocess.run(["ls", "-l"])
     # subprocess.run(["pwd"])
-    subprocess.run(["traceroute", "127.0.0.1"])
-
+    # subprocess.run(["traceroute", "127.0.0.1"]
+    zwrotka = exec_command('traceroute', '127.0.0.1')
+    print(zwrotka)
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
