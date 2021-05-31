@@ -3,10 +3,6 @@ from src.HTTPServer import HTTPServer
 from src.SystemToolsManager import exec_command
 from src.SystemToolsManager import SystemToolsManager
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -31,7 +27,7 @@ if __name__ == '__main__':
     # server.open_report()
     
     # test of shodan usage
-    t = SystemToolsManager(1)
-    t.shodanAPI('8.8.8.8')
+    # t = SystemToolsManager(1)
+    # t.shodanAPI('8.8.8.8')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
