@@ -1,8 +1,8 @@
 import subprocess
+
+from shodan import Shodan
 from xml.etree import ElementTree
-
 from src.data.NmapResult import NmapResult
-
 
 def exec_command(tool_name, parameters):
     split_list = parameters.split()
@@ -53,5 +53,25 @@ def parse_nmap_xml_result(xml_string):
         ports.append(dict([('protocol', protocol), ('port_id', port_id), ('port_state', port_state),
                           ('service_name', service_name)]))
     summary = root.find('runstats').find('finished').get('summary')
-
     return NmapResult(state, host_ip_address, ip_version, hostnames, extraports, ports, summary)
+
+
+
+def shodanAPI(domainIP):
+    api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI') # API account key, required to use shodan
+    host = api.host(domainIP) # return a lot of data, stored in JSON type
+    print("""
+            Basic information:
+            IP: {}
+            Hostname: {}
+            Organization: {}
+            Operating System: {}
+            AS number: {}
+            Domains: {}
+            Ports: {}
+    """.format(host['ip_str'], host.get('hostnames','n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'), host.get('asn', 'n/a'), host.get('domains','n/a'), host.get('ports','n/a')))
+
+def spiderfoot(pageName, modules)
+    params = 'spiderfoot -s' + pageName + '-t' + modules + '-f -q -o json'
+    exec_command('spiderfoot', params)
+
