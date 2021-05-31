@@ -1,22 +1,16 @@
-import this
 from tkinter import *
 from tkinter import messagebox
+import SystemToolsManager
 
 
 class GUIModule:
     nmap_check_buttons = []
     vars = []
     input_fields = []
-
+    names = [['TCP Connect', '-sT'], ['Stealth Connect', '-sS'], ['Xmas', '-sX'], ['FIN', '-sF'], ['ACK', '-sA'],
+             ['NULL', '-sN']]
 
     def __init__(self):
-        # tcp = IntVar()
-        # stealth = IntVar()
-        # xmas = IntVar()
-        # fin = IntVar()
-        # ack = IntVar()
-        # null = IntVar()
-
         outer_bg = "#696969"
         inner_bg = "#F4A201"
 
@@ -51,7 +45,8 @@ class GUIModule:
 
         tcp = IntVar()
         nmap_check_button1 = Checkbutton(nmap_frame, text="TCP Connect", bg=inner_bg, font=("Calibri", 9, "bold"),
-                                         activebackground=inner_bg, variable=tcp, command=lambda: self.deselect_others(nmap_check_button1))
+                                         activebackground=inner_bg, variable=tcp,
+                                         command=lambda: self.deselect_others(nmap_check_button1))
         nmap_check_button1.config(highlightthickness=0)
         nmap_check_button1.place(relx=0.05, rely=0.25)
         self.nmap_check_buttons.append([nmap_check_button1, tcp])
@@ -59,14 +54,16 @@ class GUIModule:
 
         stealth = IntVar()
         nmap_check_button2 = Checkbutton(nmap_frame, text="Stealth Connect", bg=inner_bg, font=("Calibri", 9, "bold"),
-                                         activebackground=inner_bg, variable=stealth, command=lambda: self.deselect_others(nmap_check_button2))
+                                         activebackground=inner_bg, variable=stealth,
+                                         command=lambda: self.deselect_others(nmap_check_button2))
         nmap_check_button2.config(highlightthickness=0)
         nmap_check_button2.place(relx=0.5, rely=0.25)
         self.nmap_check_buttons.append([nmap_check_button2, stealth])
 
         xmas = IntVar()
         nmap_check_button3 = Checkbutton(nmap_frame, text="Xmas", bg=inner_bg, font=("Calibri", 9, "bold"),
-                                         activebackground=inner_bg, variable=xmas, command=lambda: self.deselect_others(nmap_check_button3))
+                                         activebackground=inner_bg, variable=xmas,
+                                         command=lambda: self.deselect_others(nmap_check_button3))
         nmap_check_button3.config(highlightthickness=0)
         nmap_check_button3.place(relx=0.05, rely=0.5)
         self.nmap_check_buttons.append([nmap_check_button3, xmas])
@@ -79,21 +76,24 @@ class GUIModule:
 
         fin = IntVar()
         nmap_check_button5 = Checkbutton(nmap_frame, text="FIN", bg=inner_bg, font=("Calibri", 9, "bold"),
-                                         activebackground=inner_bg, variable=fin, command=lambda: self.deselect_others(nmap_check_button5))
+                                         activebackground=inner_bg, variable=fin,
+                                         command=lambda: self.deselect_others(nmap_check_button5))
         nmap_check_button5.config(highlightthickness=0)
         nmap_check_button5.place(relx=0.5, rely=0.5)
         self.nmap_check_buttons.append([nmap_check_button5, fin])
 
         ack = IntVar()
         nmap_check_button6 = Checkbutton(nmap_frame, text="ACK", bg=inner_bg, font=("Calibri", 9, "bold"),
-                                         activebackground=inner_bg, variable=ack, command=lambda: self.deselect_others(nmap_check_button6))
+                                         activebackground=inner_bg, variable=ack,
+                                         command=lambda: self.deselect_others(nmap_check_button6))
         nmap_check_button6.config(highlightthickness=0)
         nmap_check_button6.place(relx=0.05, rely=0.75)
         self.nmap_check_buttons.append([nmap_check_button6, ack])
 
         null = IntVar()
         nmap_check_button7 = Checkbutton(nmap_frame, text="NULL", bg=inner_bg, font=("Calibri", 9, "bold"),
-                                         activebackground=inner_bg, variable=null, command=lambda: self.deselect_others(nmap_check_button7))
+                                         activebackground=inner_bg, variable=null,
+                                         command=lambda: self.deselect_others(nmap_check_button7))
         nmap_check_button7.config(highlightthickness=0)
         nmap_check_button7.place(relx=0.5, rely=0.75)
         self.nmap_check_buttons.append([nmap_check_button7, null])
@@ -119,8 +119,27 @@ class GUIModule:
                 return -1
         return 0
 
+    def translate_nmap_option(self, checkbutton_name):
+        for x in self.names:
+            if x[0] == checkbutton_name:
+                return x[1]
+        return ''
+
     def do_sth(self):
         if self.validate_input() == 0:
-            messagebox.showwarning('Warning', 'Report generation have been started! It might take a few minutes...'
-                                              '\nPlease wait.')
-            # tutaj start generacji raportu
+            # messagebox.showwarning('Warning', 'Report generation have been started! It might take a few minutes...'
+            #                                   '\nPlease wait.')
+            org_name = self.input_fields[0].get()
+            website_address = self.input_fields[1].get()
+            for x in self.nmap_check_buttons:
+                if x[1].get() == 1:
+                    nmap_scan_option = x[0]['text']
+
+            ret = self.translate_nmap_option(nmap_scan_option)
+            if ret == "":
+                messagebox.showwarning('Error!', 'Critical error occurred!')
+                print('Error: Critical error at do_sth in GUIModule')
+            else:
+                result = SystemToolsManager.nmap('-oX - ' + website_address + ' ' + ret)
+                nmap_res = SystemToolsManager.parse_nmap_xml_result(result)
+                nmap_res.format_to_html()
