@@ -1,10 +1,11 @@
+import json
 import subprocess
 
 from shodan import Shodan
 from xml.etree import ElementTree
-from src.data.NmapResult import NmapResult
-from src.data.TheHarvesterResult import TheHarvesterResult
-from src.data.ShodanResult import ShodanResult
+from data.NmapResult import NmapResult
+from data.TheHarvesterResult import TheHarvesterResult
+from data.ShodanResult import ShodanResult
 
 
 def exec_command(tool_name, parameters):
@@ -32,6 +33,15 @@ def recon_ng(params):
 
 def spiderfoot(params):
     return exec_command('spiderfoot', params)
+
+
+def parse_spider_json_result(result):
+    result_json = json.loads(result)
+    html_out = "<tr><td>E-mails:</td><td>"
+    for obj in result_json:
+        html_out += obj['data'] + ", "
+    html_out += "</td></tr>"
+    return html_out
 
 
 def parse_nmap_xml_result(xml_string):

@@ -1,8 +1,14 @@
+import json
+
 import SystemToolsManager
 
-html_result = SystemToolsManager.shodanAPI("8.8.8.8")
-print("Saving to file")
+result = SystemToolsManager.spiderfoot("-s umed.pl -t EMAILADDR -f -x -q -o json")
+result_json = json.loads(result)
+html_out = "<tr><td>E-mails:</td><td>"
+for obj in result_json:
+    html_out += obj['data'] + ", "
+html_out += "</td></tr>"
 
 f = open("test.html", "a")
-f.write(html_result.format_to_html())
+f.write(html_out)
 f.close()
