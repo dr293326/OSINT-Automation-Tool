@@ -2,6 +2,7 @@ import subprocess
 from xml.etree import ElementTree
 
 from src.data.NmapResult import NmapResult
+from src.data.TheHarvesterResult import TheHarvesterResult
 
 
 def exec_command(tool_name, parameters):
@@ -51,7 +52,24 @@ def parse_nmap_xml_result(xml_string):
         port_state = port.find('state').get('state')
         service_name = port.find('service').get('name')
         ports.append(dict([('protocol', protocol), ('port_id', port_id), ('port_state', port_state),
-                          ('service_name', service_name)]))
+                           ('service_name', service_name)]))
     summary = root.find('runstats').find('finished').get('summary')
 
     return NmapResult(state, host_ip_address, ip_version, hostnames, extraports, ports, summary)
+
+
+def parse_harvester_xml_result(xml_string):
+    emails_list = []
+    hosts_list = []
+
+    root = ElementTree.fromstring(xml_string)
+    mails = root.findall('email')
+    hosts = root.findall('host')
+
+    for x in mails:
+        emails_list.append(x.text)
+
+    for x in hosts:
+        hosts_list.append([('ip', x.find('ip').text), ('hostname', x.find('hostname').text)])
+
+    return TheHarvesterResult(emails_list, hosts_list)
