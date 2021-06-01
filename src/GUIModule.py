@@ -193,13 +193,24 @@ class GUIModule:
                 messagebox.showwarning('Error!', 'Critical error occurred!')
                 print('Error: Critical error at do_sth in GUIModule')
             else:
+                # NMAP
                 # result = SystemToolsManager.nmap('-oX - ' + website_address + ' ' + ret)
                 # nmap_res = SystemToolsManager.parse_nmap_xml_result(result)
                 # nmap_res.format_to_html()
 
+                # THE_HARVESTER
                 opt = self.curr_harvester_opt['text']
                 SystemToolsManager.the_harvester('-d ' + website_address + ' ' +
-                                                 '-l 100 -b '+ opt + ' -f harvest.xml')
+                                                 '-l 100 -b ' + opt + ' -f harvest.xml')
                 result = SystemToolsManager.exec_command('cat', 'harvest.xml')
                 res = SystemToolsManager.parse_harvester_xml_result(result)
                 res.format_to_html()
+
+                # SHODAN
+                shodan_result = SystemToolsManager.shodanAPI(website_address)
+                shodan_result_html = shodan_result.format_to_html()
+
+                # SPIDERFOOT
+                spider_result_html = "<br><h3>SPIDERFOOT</h3><br><table><tr><th>Key</th><th>Value</th></tr>"
+                spider_result = SystemToolsManager.spiderfoot("-s " + website_address + " -t EMAILADDR -f -x -q -o json")
+                spider_result_html += SystemToolsManager.parse_spider_json_result(spider_result)
