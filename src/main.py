@@ -1,7 +1,7 @@
-from src.GUIModule import GUIModule
-from src.HTTPServer import HTTPServer
-from src.SystemToolsManager import exec_command
-from src.SystemToolsManager import SystemToolsManager
+from GUIModule import GUIModule
+# from src.HTTPServer import HTTPServer
+# from src.SystemToolsManager import exec_command
+# from src.SystemToolsManager import SystemToolsManager
 
 
 # Press the green button in the gutter to run the script.
