@@ -5,6 +5,7 @@ from xml.etree import ElementTree
 from src.data.NmapResult import NmapResult
 from src.data.TheHarvesterResult import TheHarvesterResult
 
+
 def exec_command(tool_name, parameters):
     split_list = parameters.split()
     split_list.insert(0, tool_name)
@@ -57,10 +58,9 @@ def parse_nmap_xml_result(xml_string):
     return NmapResult(state, host_ip_address, ip_version, hostnames, extraports, ports, summary)
 
 
-
 def shodanAPI(domainIP):
-    api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI') # API account key, required to use shodan
-    host = api.host(domainIP) # return a lot of data, stored in JSON type
+    api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')  # API account key, required to use shodan
+    host = api.host(domainIP)  # return a lot of data, stored in JSON type
     print("""
             Basic information:
             IP: {}
@@ -70,12 +70,13 @@ def shodanAPI(domainIP):
             AS number: {}
             Domains: {}
             Ports: {}
-    """.format(host['ip_str'], host.get('hostnames','n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'), host.get('asn', 'n/a'), host.get('domains','n/a'), host.get('ports','n/a')))
+    """.format(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
+               host.get('asn', 'n/a'), host.get('domains', 'n/a'), host.get('ports', 'n/a')))
 
-def spiderfoot(pageName, modules)
+
+def spiderfoot(pageName, modules):
     params = 'spiderfoot -s' + pageName + '-t' + modules + '-f -q -o json'
     exec_command('spiderfoot', params)
-
 
 
 def parse_harvester_xml_result(xml_string):
