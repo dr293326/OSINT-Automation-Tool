@@ -4,6 +4,7 @@ from shodan import Shodan
 from xml.etree import ElementTree
 from src.data.NmapResult import NmapResult
 from src.data.TheHarvesterResult import TheHarvesterResult
+from src.data.ShodanResult import ShodanResult
 
 
 def exec_command(tool_name, parameters):
@@ -79,7 +80,7 @@ def parse_harvester_xml_result(xml_string):
     return TheHarvesterResult(emails_list, hosts_list)
 
 
-  def shodanAPI(domain_ip):
+def shodanAPI(domain_ip):
     api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')
     host = api.host(domain_ip)
     return ShodanResult(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
