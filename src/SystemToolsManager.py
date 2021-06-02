@@ -4,6 +4,10 @@ from shodan import Shodan
 from xml.etree import ElementTree
 from src.data.NmapResult import NmapResult
 from src.data.TheHarvesterResult import TheHarvesterResult
+import requests
+import json
+
+from src.data.VirusTotalResult import VirusTotalResult
 
 
 def exec_command(tool_name, parameters):
@@ -58,6 +62,23 @@ def parse_nmap_xml_result(xml_string):
     return NmapResult(state, host_ip_address, ip_version, hostnames, extraports, ports, summary)
 
 
+def parse_harvester_xml_result(xml_string):
+    emails_list = []
+    hosts_list = []
+
+    root = ElementTree.fromstring(xml_string)
+    mails = root.findall('email')
+    hosts = root.findall('host')
+
+    for x in mails:
+        emails_list.append(x.text)
+
+    for x in hosts:
+        hosts_list.append([('ip', x.find('ip').text), ('hostname', x.find('hostname').text)])
+
+    return TheHarvesterResult(emails_list, hosts_list)
+
+
 def shodanAPI(domainIP):
     api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')  # API account key, required to use shodan
     host = api.host(domainIP)  # return a lot of data, stored in JSON type
@@ -79,18 +100,28 @@ def spiderfoot(pageName, modules):
     exec_command('spiderfoot', params)
 
 
-def parse_harvester_xml_result(xml_string):
-    emails_list = []
-    hosts_list = []
+def virustotal(main_website_address):
+    headers = {
+        'x-apikey': '9360782e77bdb96caf0a6c459aa9d66006e639d59af2162b01e70af514c16d1b',
+    }
+    params = (
+        ('query', main_website_address),
+    )
+    response = requests.get('https://www.virustotal.com/api/v3/search', headers=headers, params=params)
+    return parse_virustotal_json_result(response.content.decode('utf-8'))
 
-    root = ElementTree.fromstring(xml_string)
-    mails = root.findall('email')
-    hosts = root.findall('host')
 
-    for x in mails:
-        emails_list.append(x.text)
+def parse_virustotal_json_result(json_string):
+    root = json.loads(json_string)
+    last_dns_records = root['attributes']['last_dns_records']
+    popularity_ranks = root['attributes']['popularity_ranks']
+    last_analysis_stats = root['attributes']['last_analysis_stats']
+    last_analysis_results = root['attributes']['last_analysis_results']
+    public_key = root['attributes']['last_http_certificate']['public_key']
+    subdomains = root['attributes']['last_http_certificate']['extensions']['subject_alternative_name']
+    subject = root['attributes']['last_http_certificate']['subject']
+    categories = root['attributes']['categories']
 
-    for x in hosts:
-        hosts_list.append([('ip', x.find('ip').text), ('hostname', x.find('hostname').text)])
-
-    return TheHarvesterResult(emails_list, hosts_list)
+    return VirusTotalResult(dns_records=last_dns_records, popularity_ranks=popularity_ranks,
+                            analysis_stats=last_analysis_stats, analysis_results=last_analysis_results,
+                            public_key=public_key, subdomains_list=subdomains, subject=subject, categories=categories)

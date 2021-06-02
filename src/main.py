@@ -1,12 +1,11 @@
 from src.GUIModule import GUIModule
 from src.HTTPServer import HTTPServer
-from src.SystemToolsManager import exec_command
-from src.SystemToolsManager import SystemToolsManager
-
+from src.SystemToolsManager import exec_command, virustotal
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    GUIModule()
+    virustotal('umed.pl')
+    # GUIModule()
     # print_hi('PyCharm')
     # subprocess.run(["print_hi(\'PyCharm\')"])
     # subprocess.run(["ls", "-l"])
@@ -30,4 +29,3 @@ if __name__ == '__main__':
     # t = SystemToolsManager(1)
     # t.shodanAPI('8.8.8.8')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
