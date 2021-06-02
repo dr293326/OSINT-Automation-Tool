@@ -1,8 +1,6 @@
-from GUIModule import GUIModule
-# from src.HTTPServer import HTTPServer
-# from src.SystemToolsManager import exec_command
-# from src.SystemToolsManager import SystemToolsManager
-
+from src.GUIModule import GUIModule
+from src.HTTPServer import HTTPServer
+from src.SystemToolsManager import exec_command, virustotal
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
