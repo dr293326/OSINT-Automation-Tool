@@ -40,6 +40,26 @@ def spiderfoot(params):
     return exec_command('spiderfoot', params)
 
 
+def virustotal(main_website_address):
+    headers = {
+        'x-apikey': '9360782e77bdb96caf0a6c459aa9d66006e639d59af2162b01e70af514c16d1b',
+    }
+    params = (
+        ('query', main_website_address),
+    )
+    response = requests.get('https://www.virustotal.com/api/v3/search', headers=headers, params=params)
+    return parse_virustotal_json_result(response.content.decode('utf-8'))
+
+
+def shodanAPI(domain_ip):
+    api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')
+    host = api.host(domain_ip)
+    return ShodanResult(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
+                        host.get('asn', 'n/a'), host.get('domains', 'n/a'), host.get('ports', 'n/a'),
+                        host.get('country_name', 'n/a'),
+                        host.get('city', 'n/a'), host.get('latitude', 'n/a'), host.get('longitude', 'n/a'))
+
+
 def parse_spider_json_result(result):
     result_json = json.loads(result)
     html_out = "<tr><td>E-mails:</td><td>"
@@ -77,6 +97,7 @@ def parse_nmap_xml_result(xml_string):
     summary = root.find('runstats').find('finished').get('summary')
     return NmapResult(state, host_ip_address, ip_version, hostnames, extraports, ports, summary)
 
+
 def parse_harvester_xml_result(xml_string):
     emails_list = []
     hosts_list = []
@@ -92,22 +113,6 @@ def parse_harvester_xml_result(xml_string):
         hosts_list.append([('ip', x.find('ip').text), ('hostname', x.find('hostname').text)])
 
     return TheHarvesterResult(emails_list, hosts_list)
-
-
-def shodanAPI(domainIP):
-    api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')  # API account key, required to use shodan
-    host = api.host(domainIP)  # return a lot of data, stored in JSON type
-    print("""
-            Basic information:
-            IP: {}
-            Hostname: {}
-            Organization: {}
-            Operating System: {}
-            AS number: {}
-            Domains: {}
-            Ports: {}
-    """.format(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
-               host.get('asn', 'n/a'), host.get('domains', 'n/a'), host.get('ports', 'n/a')))
 
 
 def spiderfoot(pageName, modules):
@@ -147,11 +152,3 @@ def parse_virustotal_json_result(json_string):
                             analysis_stats=last_analysis_stats, analysis_results=last_analysis_results,
                             public_key=public_key, subject=subject, subdomains_list=subdomains,
                             categories=categories)
-
-
-def shodanAPI(domain_ip):
-    api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')
-    host = api.host(domain_ip)
-    return ShodanResult(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
-                        host.get('asn', 'n/a'), host.get('domains', 'n/a'), host.get('ports', 'n/a'), host.get('country_name', 'n/a'),
-                        host.get('city', 'n/a'), host.get('latitude', 'n/a'), host.get('longitude', 'n/a'))
