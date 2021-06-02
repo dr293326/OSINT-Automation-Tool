@@ -145,6 +145,8 @@ def parse_virustotal_json_result(json_string):
 
     return VirusTotalResult(dns_records=last_dns_records, popularity_ranks=popularity_ranks,
                             analysis_stats=last_analysis_stats, analysis_results=last_analysis_results,
+                            public_key=public_key, subject=subject, subdomains_list=subdomains,
+                            categories=categories)
 
 
 def shodanAPI(domain_ip):
