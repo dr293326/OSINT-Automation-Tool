@@ -1,3 +1,5 @@
+import tkinter.messagebox
+from threading import Thread
 from tkinter import *
 from tkinter import messagebox
 import SystemToolsManager
@@ -17,10 +19,10 @@ class GUIModule:
         outer_bg = "#696969"
         inner_bg = "#F4A201"
 
-        root = Tk()
-        # canvas = Canvas(root, height=400, width=700, bg='black')
+        self.root = Tk()
+        # canvas = Canvas(self.root, height=400, width=700, bg='black')
         # canvas.pack()
-        main_frame = Frame(root, height=400, width=700, bg=outer_bg)
+        main_frame = Frame(self.root, height=400, width=700, bg=outer_bg)
         main_frame.pack(expand=True, fill='both')
 
         name_frame = Frame(main_frame, bg=inner_bg)
@@ -148,7 +150,7 @@ class GUIModule:
                         activebackground="white", activeforeground=inner_bg, command=self.do_sth)
         button.place(relx=0.78, rely=0.9)
 
-        root.mainloop()
+        self.root.mainloop()
 
     def deselect_others(self, checkbutton, checkbutton_list):
 
@@ -185,21 +187,35 @@ class GUIModule:
             #                                   '\nPlease wait.')
             org_name = self.input_fields[0].get()
             website_address = self.input_fields[1].get()
+            opt = self.curr_harvester_opt['text']
             for x in self.nmap_check_buttons:
                 if x[1].get() == 1:
                     nmap_scan_option = x[0]['text']
 
             ret = self.translate_nmap_option(nmap_scan_option)
-            if ret == "":
+            if ret == "" or opt == "":
                 messagebox.showwarning('Error!', 'Critical error occurred!')
                 print('Error: Critical error at do_sth in GUIModule')
             else:
+                tkinter.messagebox.showinfo('Attention', 'The report generation process may take several minutes.')
+                self.root.destroy()
+                # outer_bg = "#696969"
+                # inner_bg = "#F4A201"
+                # self.root = Tk()
+                # main_frame = Frame(self.root, height=200, width=300, bg=outer_bg)
+                # main_frame.pack(expand=True, fill='both')
+                #
+                # label = Label(main_frame, text="Please wait...", bg=inner_bg,
+                #               font=("Calibri", 9, "bold"),
+                #               fg='white')
+                # label.place(relx=0.25, rely=0.25, relheight=0.5, relwidth=0.5)
+                # Thread(target=self.root.mainloop).start()
+
                 # NMAP
                 result = SystemToolsManager.nmap('-oX - ' + website_address + ' ' + ret)
                 nmap_result = SystemToolsManager.parse_nmap_xml_result(result)
 
                 # THE_HARVESTER
-                opt = self.curr_harvester_opt['text']
                 ret = SystemToolsManager.the_harvester('-d ' + website_address + ' ' +
                                                        '-l 100 -b ' + opt + ' -f harvest2.xml')
                 result = SystemToolsManager.exec_command('cat', 'harvest2.xml')
@@ -217,6 +233,6 @@ class GUIModule:
 
                 # VIRUSTOTAL
                 virustotal_result = SystemToolsManager.virustotal(website_address)
-                html_result = prepare_html(nmap_result=nmap_result, theharvester_result=theharvester_result,
+                html_result = prepare_html(org_name=org_name,nmap_result=nmap_result, theharvester_result=theharvester_result,
                                            virustotal_result=virustotal_result)
                 HTTPServer().open_report()
