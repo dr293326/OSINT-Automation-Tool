@@ -9,10 +9,10 @@ import jinja2
 from jinja2 import Template, Environment, FileSystemLoader
 
 
-def prepare_html(nmap_result, theharvester_result, virustotal_result):
+def prepare_html(nmap_result, theharvester_result, virustotal_result, org_name):
     env = Environment(loader=FileSystemLoader('template'))
     template = env.get_template('index.html')
-    output_from_parsed_template = template.render(nmap=nmap_result, theharvester=theharvester_result, virustotal=virustotal_result)
+    output_from_parsed_template = template.render(nmap=nmap_result, theharvester=theharvester_result, virustotal=virustotal_result, org_name=org_name)
     web_dir = os.path.join(os.path.dirname(__file__), 'web/index.html')
     with open(web_dir, "w") as fh:
         fh.write(output_from_parsed_template)

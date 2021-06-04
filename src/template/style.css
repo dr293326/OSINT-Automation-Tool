@@ -72,8 +72,9 @@ h2 a {
 }
 
 .container td, .container th {
-      padding: 0% 0%;
+      padding: 0.5% 0.25%;
       width: auto;
+
 }
 
 /* Background-color of the odd rows */
@@ -150,6 +151,18 @@ h3 {
   color: #FB667A;
 }
 
+h4 {
+  font-size:1.5em;
+  font-weight: 400;
+  text-align: left;
+  display: block;
+  line-height:0px;
+  padding: 20px 0 0px 0;
+  padding-left: 1em;
+  color: #FB667A;
+  margin-bottom: 1em;
+}
+
 .tab {
     padding: 0 0 0 0;
     display: block;
@@ -166,7 +179,7 @@ h3 {
 }
 
 .nmap-ports-protocol {
-    width: 35% !important;
+    width: 33% !important;
 }
 
 .nmap-summary {
@@ -194,6 +207,6 @@ h3 {
 }
 
 .virustotal-fifth-line {
-    width: 30% !important;
+    width: 40% !important;
 }
 

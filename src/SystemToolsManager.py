@@ -47,8 +47,12 @@ def virustotal(main_website_address):
     params = (
         ('query', main_website_address),
     )
-    response = requests.get('https://www.virustotal.com/api/v3/search', headers=headers, params=params)
-    return parse_virustotal_json_result(response.content.decode('utf-8'))
+    try:
+        response = requests.get('https://www.virustotal.com/api/v3/search', headers=headers, params=params)
+        return parse_virustotal_json_result(response.content.decode('utf-8'))
+    except requests.exceptions.ConnectionError:
+        print('VirusTotal API refused connection')
+        return parse_virustotal_json_result('')
 
 
 def shodanAPI(domain_ip):
@@ -85,15 +89,17 @@ def parse_nmap_xml_result(xml_string):
         hostnames.append(hostname.get('name'))
 
     for extra in host.find('ports').findall('extraports'):
-        extraports.append(dict([('state', extra.get('state')), ('count', extra.get('count'))]))
+        if extra is not None:
+            extraports.append(dict([('state', extra.get('state')), ('count', extra.get('count'))]))
 
     for port in host.find('ports').findall('port'):
-        protocol = port.get('protocol')
-        port_id = port.get('portid')
-        port_state = port.find('state').get('state')
-        service_name = port.find('service').get('name')
-        ports.append(dict([('protocol', protocol), ('port_id', port_id), ('port_state', port_state),
-                           ('service_name', service_name)]))
+        if port is not None:
+            protocol = port.get('protocol')
+            port_id = port.get('portid')
+            port_state = port.find('state').get('state')
+            service_name = port.find('service').get('name')
+            ports.append(dict([('protocol', protocol), ('port_id', port_id), ('port_state', port_state),
+                               ('service_name', service_name)]))
     summary = root.find('runstats').find('finished').get('summary')
     return NmapResult(state, host_ip_address, ip_version, hostnames, extraports, ports, summary)
 
@@ -107,14 +113,15 @@ def parse_harvester_xml_result2(xml_string):
     hosts = root.findall('host')
 
     for x in mails:
-        if not x is None:
+        if x is not None:
             emails_list.append(x.text)
 
     for x in hosts:
-        if not x is None:
-            var1 = x.find('ip').text
-            var2 = x.find('hostname').text
-            hosts_list.append(dict([('ip', var1), ('hostname', var2)]))
+        if x is not None:
+            var1 = x.find('ip')
+            var2 = x.find('hostname')
+            if (var1 is not None) and (var2 is not None):
+                hosts_list.append(dict([('ip', var1.text), ('hostname', var2.text)]))
 
     return TheHarvesterResult(emails_list, hosts_list)
 
