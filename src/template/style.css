@@ -61,16 +61,16 @@ h2 a {
 .container {
 	  text-align: left;
 	  overflow: hidden;
-	  width: 80%;
-	  margin: 0 auto;
-  display: table;
-  padding: 0 0 8em 0;
+	  width: auto;
+	  margin: 0 0;
+      display: inline;
+      padding: 0 0 1em 0;
 }
 
 .container td, .container th {
-	  padding-bottom: 2%;
-	  padding-top: 2%;
-  padding-left:2%;  
+
+      padding: 0% 0%;
+        width: auto;
 }
 
 /* Background-color of the odd rows */
@@ -114,3 +114,37 @@ h2 a {
 .container td:nth-child(4),
 .container th:nth-child(4) { display: none; }
 }
+
+.div-headline {
+    text-align: left;
+      overflow: hidden;
+      width: 80%;
+      margin: 0 auto;
+      display: block;
+      padding: 0 0 0 0;
+      margin-bottom: 1em;
+      background-color: #323C50;
+}
+
+.div-container {
+      text-align: left;
+      overflow: hidden;
+      width: 80%;
+      margin: 0 auto;
+      display: block;
+      padding: 5px 0 5px 0;
+      margin-bottom: 1em;
+      background-color: #323C50;
+}
+
+h3 {
+  font-size:2em;
+  font-weight: 400;
+  text-align: left;
+  display: block;
+  line-height:0px;
+  padding: 5px 0 5px 0;
+  padding-left: 1em;
+  color: #FB667A;
+}
+
