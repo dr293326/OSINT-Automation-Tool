@@ -61,16 +61,19 @@ h2 a {
 .container {
 	  text-align: left;
 	  overflow: hidden;
-	  width: auto;
+	  width: 100%;
 	  margin: 0 0;
       display: inline;
       padding: 0 0 1em 0;
 }
 
-.container td, .container th {
+.container table {
+    width: 100%;
+}
 
+.container td, .container th {
       padding: 0% 0%;
-        width: auto;
+      width: auto;
 }
 
 /* Background-color of the odd rows */
@@ -111,8 +114,7 @@ h2 a {
 }
 
 @media (max-width: 800px) {
-.container td:nth-child(4),
-.container th:nth-child(4) { display: none; }
+
 }
 
 .div-headline {
@@ -134,7 +136,7 @@ h2 a {
       display: block;
       padding: 5px 0 5px 0;
       margin-bottom: 1em;
-      background-color: #323C50;
+      background-color:#1F2739;
 }
 
 h3 {
@@ -146,5 +148,52 @@ h3 {
   padding: 5px 0 5px 0;
   padding-left: 1em;
   color: #FB667A;
+}
+
+.tab {
+    padding: 0 0 0 0;
+    display: block;
+    margin-bottom: 10px;
+}
+
+
+.nmap-first-line {
+    width: 5% !important;
+}
+
+.nmap-second-line {
+    width: 5% !important;
+}
+
+.nmap-ports-protocol {
+    width: 35% !important;
+}
+
+.nmap-summary {
+    width: 5% !important;
+}
+
+.harvester-line {
+    width: 36.65% !important;
+}
+
+.virustotal-first-line {
+    width: 10% !important;
+}
+
+.virustotal-second-line {
+    width: 5% !important;
+}
+
+.virustotal-third-line {
+    width: 10% !important;
+}
+
+.virustotal-fourth-line {
+    width: 20% !important;
+}
+
+.virustotal-fifth-line {
+    width: 30% !important;
 }
 

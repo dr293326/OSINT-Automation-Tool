@@ -197,16 +197,14 @@ class GUIModule:
                 # NMAP
                 result = SystemToolsManager.nmap('-oX - ' + website_address + ' ' + ret)
                 nmap_result = SystemToolsManager.parse_nmap_xml_result(result)
-                html_result = prepare_html(nmap_result=nmap_result)
-                HTTPServer().open_report()
 
                 # THE_HARVESTER
-                # opt = self.curr_harvester_opt['text']
-                # SystemToolsManager.the_harvester('-d ' + website_address + ' ' +
-                #                                  '-l 100 -b ' + opt + ' -f harvest.xml')
-                # result = SystemToolsManager.exec_command('cat', 'harvest.xml')
-                # res = SystemToolsManager.parse_harvester_xml_result(result)
-                # res.format_to_html()
+                opt = self.curr_harvester_opt['text']
+                ret = SystemToolsManager.the_harvester('-d ' + website_address + ' ' +
+                                                       '-l 100 -b ' + opt + ' -f harvest2.xml')
+                result = SystemToolsManager.exec_command('cat', 'harvest2.xml')
+                theharvester_result = SystemToolsManager.parse_harvester_xml_result2(result)
+
                 #
                 # # SHODAN
                 # shodan_result = SystemToolsManager.shodanAPI(website_address)
@@ -216,3 +214,9 @@ class GUIModule:
                 # spider_result_html = "<br><h3>SPIDERFOOT</h3><br><table><tr><th>Key</th><th>Value</th></tr>"
                 # spider_result = SystemToolsManager.spiderfoot("-s " + website_address + " -t EMAILADDR -f -x -q -o json")
                 # spider_result_html += SystemToolsManager.parse_spider_json_result(spider_result)
+
+                # VIRUSTOTAL
+                virustotal_result = SystemToolsManager.virustotal(website_address)
+                html_result = prepare_html(nmap_result=nmap_result, theharvester_result=theharvester_result,
+                                           virustotal_result=virustotal_result)
+                HTTPServer().open_report()

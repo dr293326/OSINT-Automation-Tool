@@ -14,108 +14,137 @@
 	<h3>Nmap</h3>
 </div>
 <div id="nmap" class="div-container">
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="nmap-first-line"><h1>IP</h1></th>
+					<th class="nmap-first-line"><h1>IP Type</h1></th>
+					<th class="nmap-first-line"><h1>Host status</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="nmap-first-line">{{nmap.ip_address}}</td>
+					<td class="nmap-first-line">{{nmap.ip_type}}</td>
+					<td class="nmap-first-line">{{nmap.host_status|capitalize}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>IP</h1></th>
-				<th><h1>IP Type</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{{nmap.ip_address}}</td>
-				<td>{{nmap.ip_type}}</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="nmap-second-line"><h1>Host name</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for x in nmap.host_names %}
+				<tr>
+					<td class="nmap-second-line">{{x}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>Host status</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="nmap-ports-protocol"><h1>Protocol</h1></th>
+					<th class="nmap-ports-protocol"><h1>Port ID</h1></th>
+					<th class="nmap-ports-protocol"><h1>State</h1></th>
+					<th class="nmap-ports-protocol"><h1>Service</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for port in nmap.ports %}
+				<tr>
+					<td class="nmap-ports-protocol">{{port['protocol']}}</td>
+					<td class="nmap-ports-protocol">{{port['port_id']}}</td>
+					<td class="nmap-ports-protocol">{{port['port_state']}}</td>
+					<td class="nmap-ports-protocol">{{port['service_name']}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
-				<td>{{nmap.host_status|capitalize}}</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="nmap-summary"><h1>Other ports</h1></th>
+					<th class="nmap-summary"><h1>Quantity</h1></th>
 
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>Host name</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for x in nmap.host_names %}
-			<tr>
-				<td>{{x}}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+				</tr>
+			</thead>
+			<tbody>
+				{% for port in nmap.extraports %}
+				<tr>
+					<td class="nmap-summary">{{port['state']}}</td>
+					<td class="nmap-summary">{{port['count']}}</td>
 
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>Protocol</h1></th>
-				<th><h1>Port ID</h1></th>
-				<th><h1>State</h1></th>
-				<th><h1>Service</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for port in nmap.ports %}
-			<tr>
-				<td>{{port['protocol']}}</td>
-				<td>{{port['port_id']}}</td>
-				<td>{{port['port_state']}}</td>
-				<td>{{port['service_name']}}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>Other ports</h1></th>
-				<th><h1>Quantity</h1></th>
-
-			</tr>
-		</thead>
-		<tbody>
-			{% for port in nmap.extraports %}
-			<tr>
-				<td>{{port['state']}}</td>
-				<td>{{port['count']}}</td>
-
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>Summary</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{{nmap.summary}}</td>
-			</tr>
-		</tbody>
-	</table>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<table class="container" id="nmap-summary">
+			<thead>
+				<tr>
+					<th class="nmap-summary"><h1>Summary</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="nmap-summary">{{nmap.summary}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <div id="the-harvester-headline" class="div-headline">
 	<h3>theHarvester</h3>
 </div>
+<div id="the-harvester" class="div-container">
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="harvester-line"><h1>IP</h1></th>
+					<th class="harvester-line"><h1>Name</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for host in theharvester.host_list %}
+				<tr>
+					<td class="harvester-line">{{host['ip']}}</td>
+					<td class="harvester-line">{{host['hostname']}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="harvester-line"><h1>eMails</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for mail in theharvester.email_list %}
+				<tr>
+					<td class="harvester-line">{{mail}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
 
 <div id="spiderfoot-headline" class="div-headline">
 	<h3>Spiderfoot</h3>
@@ -131,6 +160,167 @@
 
 <div id="virus-total-headline" class="div-headline">
 	<h3>VirusTotal</h3>
+</div>
+
+<div id="virustotal" class="div-container">
+
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="virustotal-first-line"><h1>Site address</h1></th>
+					<th class="virustotal-first-line"><h1>Organization</h1></th>
+					<th class="virustotal-first-line"><h1>Country Code</h1></th>
+					<th class="virustotal-first-line"><h1>City</h1></th>
+					<th class="virustotal-first-line"><h1>District</h1></th>
+					<th class="virustotal-first-line"><h1>Street address</h1></th>
+					<th class="virustotal-first-line"><h1>Postal code</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="virustotal-first-line">{{virustotal.subject['CN']}}</td>
+					<td class="virustotal-first-line">{{virustotal.subject['O']}}</td>
+					<td class="virustotal-first-line">{{virustotal.subject['C']}}</td>
+					<td class="virustotal-first-line">{{virustotal.subject['L']}}</td>
+					<td class="virustotal-first-line">{{virustotal.subject['ST']}}</td>
+					<td class="virustotal-first-line">{{virustotal.subject['streetAddress']}}</td>
+					<td class="virustotal-first-line">{{virustotal.subject['postalCode']}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="virustotal-second-line"><h1>Algorithm</h1></th>
+					<th class="virustotal-second-line"><h1>Category</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="virustotal-second-line">{{virustotal.public_key['algorithm']}}</td>
+					<td class="virustotal-second-line">{{virustotal.categories['alphaMountain.ai']}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="virustotal-third-line"><h1>Engine name</h1></th>
+					<th class="virustotal-third-line"><h1>Method</h1></th>
+					<th class="virustotal-third-line"><h1>Result</h1></th>
+					<th class="virustotal-third-line"><h1>Category</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for x in virustotal.analysis_results_list %}
+				<tr>
+					<td class="virustotal-third-line">{{virustotal.analysis_results_list[x]['engine_name']}}</td>
+					<td class="virustotal-third-line">{{virustotal.analysis_results_list[x]['method']}}</td>
+					<td class="virustotal-third-line">{{virustotal.analysis_results_list[x]['result']}}</td>
+					<td class="virustotal-third-line">{{virustotal.analysis_results_list[x]['category']}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="virustotal-fourth-line"><h1>Type</h1></th>
+					<th class="virustotal-fourth-line"><h1>Value</h1></th>
+					<th class="virustotal-fourth-line"><h1>TTL</h1></th>
+					<th class="virustotal-fourth-line"><h1>Tag</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for x in virustotal.dns_record_list %}
+				<tr>
+					<td class="virustotal-fourth-line">{{x['type']}}</td>
+					<td class="virustotal-fourth-line">{{x['value']}}</td>
+					<td class="virustotal-fourth-line">{{x['ttl']}}</td>
+					<td class="virustotal-fourth-line">{{x['tag']}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="virustotal-fifth-line"><h1>Subdomains</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for x in virustotal.subdomains_list %}
+				<tr>
+					<td class="virustotal-fifth-line">{{x}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="virustotal-fifth-line"><h1>Analysis Stats</h1></th>
+					<th class="virustotal-fifth-line"><h1>Quantity</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="virustotal-fifth-line">Harmless</td>
+					<td class="virustotal-fifth-line">{{virustotal.analysis_stats['harmless']}}</td>
+				</tr>
+				<tr>
+					<td class="virustotal-fifth-line">Malicious</td>
+					<td class="virustotal-fifth-line">{{virustotal.analysis_stats['malicious']}}</td>
+				</tr>
+				<tr>
+					<td class="virustotal-fifth-line">Suspicious</td>
+					<td class="virustotal-fifth-line">{{virustotal.analysis_stats['suspicious']}}</td>
+				</tr>
+				<tr>
+					<td class="virustotal-fifth-line">Undetected</td>
+					<td class="virustotal-fifth-line">{{virustotal.analysis_stats['undetected']}}</td>
+				</tr>
+				<tr>
+					<td class="virustotal-fifth-line">Timeout</td>
+					<td class="virustotal-fifth-line">{{virustotal.analysis_stats['timeout']}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="virustotal-fifth-line"><h1>Site</h1></th>
+					<th class="virustotal-fifth-line"><h1>Rank</h1></th>
+					<th class="virustotal-fifth-line"><h1>Rating date</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for x in virustotal.popularity_ranks_list %}
+				<tr>
+					<td class="virustotal-fifth-line">{{x}}</td>
+					<td class="virustotal-fifth-line">{{virustotal.popularity_ranks_list[x]['rank']}}</td>
+					<td class="virustotal-fifth-line">{{virustotal.popularity_ranks_list[x]['timestamp']}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</div>
 </div>
 <!-- partial -->
   <script  src="./../template/script.js"></script>
