@@ -2,9 +2,9 @@ from datetime import datetime
 
 from IPython.terminal.pt_inputhooks.asyncio import loop
 
-from src import SystemToolsManager
-from src.GUIModule import GUIModule
-from src.HTTPServer import HTTPServer
+import SystemToolsManager
+from GUIModule import GUIModule
+from HTTPServer import HTTPServer
 # from src.SystemToolsManager import exec_command, virustotal
 
 # Press the green button in the gutter to run the script.
