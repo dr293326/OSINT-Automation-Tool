@@ -3,8 +3,9 @@ from threading import Thread
 from tkinter import *
 from tkinter import messagebox
 import SystemToolsManager
-from src.HTTPServer import HTTPServer, prepare_html
-
+from HTTPServer import HTTPServer, prepare_html
+import socket
+from data.SpiderResult import SpiderResult
 
 class GUIModule:
     nmap_check_buttons = []
@@ -214,6 +215,7 @@ class GUIModule:
                 # NMAP
                 result = SystemToolsManager.nmap('-oX - ' + website_address + ' ' + ret)
                 nmap_result = SystemToolsManager.parse_nmap_xml_result(result)
+                #
 
                 # THE_HARVESTER
                 ret = SystemToolsManager.the_harvester('-d ' + website_address + ' ' +
@@ -223,16 +225,24 @@ class GUIModule:
 
                 #
                 # # SHODAN
-                # shodan_result = SystemToolsManager.shodanAPI(website_address)
-                # shodan_result_html = shodan_result.format_to_html()
+                print("Run SHODAN")
+                # website_ip_address = socket.gethostbyname(website_address)
+                shodan_result = SystemToolsManager.shodanAPI(website_address)
                 #
                 # # SPIDERFOOT
-                # spider_result_html = "<br><h3>SPIDERFOOT</h3><br><table><tr><th>Key</th><th>Value</th></tr>"
-                # spider_result = SystemToolsManager.spiderfoot("-s " + website_address + " -t EMAILADDR -f -x -q -o json")
-                # spider_result_html += SystemToolsManager.parse_spider_json_result(spider_result)
-
+                print("Run SPIDERFOOT")
+                spider_res = SystemToolsManager.spiderfoot("-s " + website_address + " -t EMAILADDR -f -x -q -o json")
+                spider_emails = SystemToolsManager.parse_spider_json_result(spider_res)
+                spider = SpiderResult(spider_emails)
+                #
                 # VIRUSTOTAL
                 virustotal_result = SystemToolsManager.virustotal(website_address)
-                html_result = prepare_html(org_name=org_name,nmap_result=nmap_result, theharvester_result=theharvester_result,
-                                           virustotal_result=virustotal_result)
+                #
+                # RECON-NG
+
+                #
+                # # CREATE HTML FILE WITH ALL RESULTS
+                html_result = prepare_html(org_name=org_name, nmap_result=nmap_result, theharvester_result=theharvester_result,
+                                           virustotal_result=virustotal_result, shodan_result=shodan_result,
+                                           spider_results=spider)
                 HTTPServer().open_report()
