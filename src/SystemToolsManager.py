@@ -85,7 +85,7 @@ def parse_nmap_xml_result(xml_string):
         hostnames.append(hostname.get('name'))
 
     for extra in host.find('ports').findall('extraports'):
-        extraports.append(dict([(state, extra.get('state')), ('count', extra.get('count'))]))
+        extraports.append(dict([('state', extra.get('state')), ('count', extra.get('count'))]))
 
     for port in host.find('ports').findall('port'):
         protocol = port.get('protocol')
@@ -98,7 +98,7 @@ def parse_nmap_xml_result(xml_string):
     return NmapResult(state, host_ip_address, ip_version, hostnames, extraports, ports, summary)
 
 
-def parse_harvester_xml_result(xml_string):
+def parse_harvester_xml_result2(xml_string):
     emails_list = []
     hosts_list = []
 
@@ -107,10 +107,14 @@ def parse_harvester_xml_result(xml_string):
     hosts = root.findall('host')
 
     for x in mails:
-        emails_list.append(x.text)
+        if not x is None:
+            emails_list.append(x.text)
 
     for x in hosts:
-        hosts_list.append([('ip', x.find('ip').text), ('hostname', x.find('hostname').text)])
+        if not x is None:
+            var1 = x.find('ip').text
+            var2 = x.find('hostname').text
+            hosts_list.append(dict([('ip', var1), ('hostname', var2)]))
 
     return TheHarvesterResult(emails_list, hosts_list)
 
@@ -120,35 +124,29 @@ def spiderfoot(pageName, modules):
     exec_command('spiderfoot', params)
 
 
-def parse_harvester_xml_result(xml_string):
-    emails_list = []
-    hosts_list = []
-
-    root = ElementTree.fromstring(xml_string)
-    mails = root.findall('email')
-    hosts = root.findall('host')
-
-    for x in mails:
-        emails_list.append(x.text)
-
-    for x in hosts:
-        hosts_list.append([('ip', x.find('ip').text), ('hostname', x.find('hostname').text)])
-
-    return TheHarvesterResult(emails_list, hosts_list)
-
-
 def parse_virustotal_json_result(json_string):
     root = json.loads(json_string)
-    last_dns_records = root['attributes']['last_dns_records']
-    popularity_ranks = root['attributes']['popularity_ranks']
-    last_analysis_stats = root['attributes']['last_analysis_stats']
-    last_analysis_results = root['attributes']['last_analysis_results']
-    public_key = root['attributes']['last_http_certificate']['public_key']
-    subdomains = root['attributes']['last_http_certificate']['extensions']['subject_alternative_name']
-    subject = root['attributes']['last_http_certificate']['subject']
-    categories = root['attributes']['categories']
+    root = root['data'][0]['attributes']
 
-    return VirusTotalResult(dns_records=last_dns_records, popularity_ranks=popularity_ranks,
-                            analysis_stats=last_analysis_stats, analysis_results=last_analysis_results,
+    last_dns_records = root['last_dns_records']
+    popularity_ranks = root['popularity_ranks']
+    last_analysis_stats = root['last_analysis_stats']
+    last_analysis_results = root['last_analysis_results']
+    public_key = root['last_https_certificate']['public_key']
+    subdomains = root['last_https_certificate']['extensions']['subject_alternative_name']
+    subject = root['last_https_certificate']['subject']
+    categories = root['categories']
+
+    return VirusTotalResult(dns_record_list=last_dns_records, popularity_ranks_list=popularity_ranks,
+                            analysis_stats=last_analysis_stats, analysis_results_list =last_analysis_results,
                             public_key=public_key, subject=subject, subdomains_list=subdomains,
                             categories=categories)
+
+
+# def find_list_element_by_name(curr_list, name):
+#     iter = 0
+#     for elem in curr_list:
+#         if elem[0] == name:
+#             return iter
+#         iter = iter + 1
+#     return -1
