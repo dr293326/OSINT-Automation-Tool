@@ -215,6 +215,7 @@ class GUIModule:
                 result = SystemToolsManager.nmap('-oX - ' + website_address + ' ' + ret)
                 nmap_result = SystemToolsManager.parse_nmap_xml_result(result)
 
+
                 # THE_HARVESTER
                 ret = SystemToolsManager.the_harvester('-d ' + website_address + ' ' +
                                                        '-l 100 -b ' + opt + ' -f harvest2.xml')
