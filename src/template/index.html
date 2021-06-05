@@ -150,6 +150,24 @@
 
 <div id="spiderfoot-headline" class="div-headline">
 	<h3>Spiderfoot</h3>
+
+	<table class="container">
+		<thead>
+			<tr>
+				<th><h1>Emails</h1></th>
+			</tr>
+		</thead>
+		<tbody>
+
+			<tr>
+				{% for mail in spider.emails %}
+				<td>{{mail}}</td>
+				{% endfor %}
+			</tr>
+
+		</tbody>
+	</table>
+
 </div>
 
 <div id="recon-ng-headline" class="div-headline">
@@ -158,6 +176,62 @@
 
 <div id="shodan-headline" class="div-headline">
 	<h3>Shodan</h3>
+
+	<table class="container">
+		<thead>
+			<tr>
+				<th><h1>IP</h1></th>
+				<th><h1>Hostname</h1></th>
+				<th><h1>Organization</h1></th>
+				<th><h1>Operating System</h1></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{shod.ip_address}}</td>
+				<td>{{shod.hostname}}</td>
+				<td>{{shod.org}}</td>
+				<td>{{shod.op_system}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table class="container">
+		<thead>
+			<tr>
+				<th><h1>AS number</h1></th>
+				<th><h1>Domains</h1></th>
+				<th><h1>Ports</h1></th>
+				<th><h1>Country</h1></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{shod.as_num}}</td>
+				<td>{{shod.domains}}</td>
+				<td>{{shod.ports}}</td>
+				<td>{{shod.country}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table class="container">
+		<thead>
+			<tr>
+				<th><h1>City</h1></th>
+				<th><h1>Latitude</h1></th>
+				<th><h1>Longitude</h1></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{shod.city}}</td>
+				<td>{{shod.latitude}}</td>
+				<td>{{shod.longitude}}</td>
+			</tr>
+		</tbody>
+	</table>
+
 </div>
 
 <div id="virus-total-headline" class="div-headline">

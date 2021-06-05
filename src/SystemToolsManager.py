@@ -5,12 +5,14 @@ from xml.etree import ElementTree
 from data.NmapResult import NmapResult
 from data.TheHarvesterResult import TheHarvesterResult
 from data.ShodanResult import ShodanResult
-from src.data.NmapResult import NmapResult
-from src.data.TheHarvesterResult import TheHarvesterResult
+from data.NmapResult import NmapResult
+from data.TheHarvesterResult import TheHarvesterResult
+from data.SpiderResult import SpiderResult
 import requests
 import json
+import socket
 
-from src.data.VirusTotalResult import VirusTotalResult
+from data.VirusTotalResult import VirusTotalResult
 
 
 def exec_command(tool_name, parameters):
@@ -57,6 +59,9 @@ def virustotal(main_website_address):
 
 def shodanAPI(domain_ip):
     api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')
+    print(domain_ip)
+    domain_ip = socket.gethostbyname(domain_ip)
+    print(domain_ip)
     host = api.host(domain_ip)
     return ShodanResult(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
                         host.get('asn', 'n/a'), host.get('domains', 'n/a'), host.get('ports', 'n/a'),
@@ -66,11 +71,10 @@ def shodanAPI(domain_ip):
 
 def parse_spider_json_result(result):
     result_json = json.loads(result)
-    html_out = "<tr><td>E-mails:</td><td>"
+    result = []
     for obj in result_json:
-        html_out += obj['data'] + ", "
-    html_out += "</td></tr>"
-    return html_out
+        result.append(obj['data'])
+    return result
 
 
 def parse_nmap_xml_result(xml_string):
@@ -124,11 +128,6 @@ def parse_harvester_xml_result2(xml_string):
                 hosts_list.append(dict([('ip', var1.text), ('hostname', var2.text)]))
 
     return TheHarvesterResult(emails_list, hosts_list)
-
-
-def spiderfoot(pageName, modules):
-    params = 'spiderfoot -s' + pageName + '-t' + modules + '-f -q -o json'
-    exec_command('spiderfoot', params)
 
 
 def parse_virustotal_json_result(json_string):
