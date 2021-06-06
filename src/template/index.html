@@ -158,20 +158,33 @@
 			</tr>
 		</thead>
 		<tbody>
-
-			<tr>
-				{% for mail in spider.emails %}
-				<td>{{mail}}</td>
-				{% endfor %}
-			</tr>
-
+			{% set tableCountStart = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 91, 96] %}
+			{% set tableCountStart2 = [1, 8, 13, 18, 23, 28, 33, 38, 43, 48, 53, 58, 63, 68, 73, 78, 83, 88, 93, 98] %}
+			{% set tableCountEnd = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100] %}
+			{% set tableCountEnd2 = [7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 72, 77, 82, 87, 92, 97, 102] %}
+			{% for mail in spider.emails %}
+				{% if loop.index in tableCountStart2 %} <tr> {% endif %}
+					<td>{{mail}}</td>
+				{% if loop.index in tableCountEmd2 %} </tr> {% endif %}
+			{% endfor %}
 		</tbody>
 	</table>
 
-</div>
+	<table class="container">
+		<thead>
+			<tr>
+				<th><h1>Open TCP Port Banner</h1></th>
+			</tr>
+		</thead>
+		<tbody>
+				<tr>
+					{% for banner in spider.banners %}
+					<td>{{banner}}</td>
+					{% endfor %}
+				</tr>
+		</tbody>
+	</table>
 
-<div id="recon-ng-headline" class="div-headline">
-	<h3>Recon-ng</h3>
 </div>
 
 <div id="shodan-headline" class="div-headline">
