@@ -59,9 +59,7 @@ def virustotal(main_website_address):
 
 def shodanAPI(domain_ip):
     api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')
-    print(domain_ip)
     domain_ip = socket.gethostbyname(domain_ip)
-    print(domain_ip)
     host = api.host(domain_ip)
     return ShodanResult(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
                         host.get('asn', 'n/a'), host.get('domains', 'n/a'), host.get('ports', 'n/a'),
@@ -72,8 +70,10 @@ def shodanAPI(domain_ip):
 def parse_spider_json_result(result):
     result_json = json.loads(result)
     result = []
+    types = ["Email Address", "Open TCP Port Banner"]
     for obj in result_json:
-        result.append(obj['data'])
+        if obj['type'] in types:
+            result.append(obj['data'])
     return result
 
 
