@@ -14,7 +14,8 @@ def check_if_none(var):
 
 class ShodanResult:
 
-    def __init__(self, ip_address, hostname, org, op_system, as_num, domains, ports, country, city, latitude, longitude):
+    def __init__(self, ip_address=None, hostname=None, org=None, op_system=None, as_num=None, domains=None, ports=None,
+                 country=None, city=None, latitude=None, longitude=None):
         self.ip_address = check_if_none(ip_address)
         self.hostname = check_if_none(hostname)
         self.org = check_if_none(org)

@@ -1,3 +1,4 @@
+import datetime
 import subprocess
 
 from shodan import Shodan
@@ -54,17 +55,21 @@ def virustotal(main_website_address):
         return parse_virustotal_json_result(response.content.decode('utf-8'))
     except requests.exceptions.ConnectionError:
         print('VirusTotal API refused connection')
-        return parse_virustotal_json_result('')
+        return VirusTotalResult()
 
 
 def shodanAPI(domain_ip):
     api = Shodan('Y2IXliQcbqyoAJyKynux1ovOjX5M2ukI')
-    domain_ip = socket.gethostbyname(domain_ip)
-    host = api.host(domain_ip)
-    return ShodanResult(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
-                        host.get('asn', 'n/a'), host.get('domains', 'n/a'), host.get('ports', 'n/a'),
-                        host.get('country_name', 'n/a'),
-                        host.get('city', 'n/a'), host.get('latitude', 'n/a'), host.get('longitude', 'n/a'))
+    try:
+        domain_ip = socket.gethostbyname(domain_ip)
+        host = api.host(domain_ip)
+        return ShodanResult(host['ip_str'], host.get('hostnames', 'n/a'), host.get('org', 'n/a'), host.get('os', 'n/a'),
+                            host.get('asn', 'n/a'), host.get('domains', 'n/a'), host.get('ports', 'n/a'),
+                            host.get('country_name', 'n/a'),
+                            host.get('city', 'n/a'), host.get('latitude', 'n/a'), host.get('longitude', 'n/a'))
+    except socket.gaierror:
+        print('Error at getting result from ShodanAPI')
+        return ShodanResult()
 
 
 def parse_spider_json_result(result):
@@ -142,6 +147,10 @@ def parse_virustotal_json_result(json_string):
     subdomains = root['last_https_certificate']['extensions']['subject_alternative_name']
     subject = root['last_https_certificate']['subject']
     categories = root['categories']
+
+    for curr in popularity_ranks:
+        date = datetime.datetime.fromtimestamp(popularity_ranks[curr]['timestamp'])
+        popularity_ranks[curr]['timestamp'] = date
 
     return VirusTotalResult(dns_record_list=last_dns_records, popularity_ranks_list=popularity_ranks,
                             analysis_stats=last_analysis_stats, analysis_results_list =last_analysis_results,

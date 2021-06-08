@@ -150,100 +150,139 @@
 
 <div id="spiderfoot-headline" class="div-headline">
 	<h3>Spiderfoot</h3>
-
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>Emails</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% set tableCountStart = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 91, 96] %}
-			{% set tableCountStart2 = [1, 8, 13, 18, 23, 28, 33, 38, 43, 48, 53, 58, 63, 68, 73, 78, 83, 88, 93, 98] %}
-			{% set tableCountEnd = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100] %}
-			{% set tableCountEnd2 = [7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 72, 77, 82, 87, 92, 97, 102] %}
-			{% for mail in spider.emails %}
-				{% if loop.index in tableCountStart2 %} <tr> {% endif %}
-					<td>{{mail}}</td>
-				{% if loop.index in tableCountEmd2 %} </tr> {% endif %}
-			{% endfor %}
-		</tbody>
-	</table>
-
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>Open TCP Port Banner</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-				<tr>
-					{% for banner in spider.banners %}
-					<td>{{banner}}</td>
-					{% endfor %}
-				</tr>
-		</tbody>
-	</table>
-
 </div>
+
+<div class="div-container">
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="spiderfoot-line"><h1>Emails</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for mail in spider.emails %}
+				<tr>
+					<td class="spiderfoot-line">{{mail}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="spiderfoot-line"><h1>Open TCP Port Banner</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for banner in spider.banners %}
+				<tr>
+					<td class="spiderfoot-line">{{banner}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
 
 <div id="shodan-headline" class="div-headline">
 	<h3>Shodan</h3>
+</div>
 
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>IP</h1></th>
-				<th><h1>Hostname</h1></th>
-				<th><h1>Organization</h1></th>
-				<th><h1>Operating System</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{{shod.ip_address}}</td>
-				<td>{{shod.hostname}}</td>
-				<td>{{shod.org}}</td>
-				<td>{{shod.op_system}}</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>AS number</h1></th>
-				<th><h1>Domains</h1></th>
-				<th><h1>Ports</h1></th>
-				<th><h1>Country</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{{shod.as_num}}</td>
-				<td>{{shod.domains}}</td>
-				<td>{{shod.ports}}</td>
-				<td>{{shod.country}}</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<table class="container">
-		<thead>
-			<tr>
-				<th><h1>City</h1></th>
-				<th><h1>Latitude</h1></th>
-				<th><h1>Longitude</h1></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{{shod.city}}</td>
-				<td>{{shod.latitude}}</td>
-				<td>{{shod.longitude}}</td>
-			</tr>
-		</tbody>
-	</table>
+<div class="div-container">
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="shodan-first-line"><h1>IP</h1></th>
+					<th class="shodan-first-line"><h1>Organization</h1></th>
+					<th class="shodan-first-line"><h1>Operating System</h1></th>
+					<th class="shodan-first-line"><h1>AS number</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="shodan-first-line">{{shod.ip_address}}</td>
+					<td class="shodan-first-line">{{shod.org}}</td>
+					<td class="shodan-first-line">{{shod.op_system}}</td>
+					<td class="shodan-first-line">{{shod.as_num}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="shodan-second-line"><h1>Hostnames</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for h in  shod.hostname %}
+				<tr>
+					<td class="shodan-second-line">{{h}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="tab">
+		<h4>Address and localization info</h4>
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="shodan-third-line"><h1>Country</h1></th>
+					<th class="shodan-third-line"><h1>City</h1></th>
+					<th class="shodan-third-line"><h1>Latitude</h1></th>
+					<th class="shodan-third-line"><h1>Longitude</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="shodan-third-line">{{shod.country}}</td>
+					<td class="shodan-third-line">{{shod.city}}</td>
+					<td class="shodan-third-line">{{shod.latitude}}</td>
+					<td class="shodan-third-line">{{shod.longitude}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="tab">
+		<h4>Domains and ports</h4>
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="shodan-fourth-line"><h1>Domains</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for d in shod.domains %}
+				<tr>
+					<td class="shodan-fourth-line">{{d}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="tab">
+		<table class="container">
+			<thead>
+				<tr>
+					<th class="shodan-fifth-line"><h1>Ports</h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for p in shod.ports %}
+				<tr>
+					<td class="shodan-fifth-line">{{p}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
 </div>
 

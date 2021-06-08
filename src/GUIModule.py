@@ -1,3 +1,4 @@
+import threading
 import tkinter.messagebox
 from threading import Thread
 from tkinter import *
@@ -7,11 +8,24 @@ from HTTPServer import HTTPServer, prepare_html
 import socket
 from data.SpiderResult import SpiderResult
 
+spider: SpiderResult
+
+def run_spiderfoot(website_address):
+    print("Run SPIDERFOOT")
+    spider_res = SystemToolsManager.spiderfoot("-s " + website_address + " -t EMAILADDR -f -x -q -o json")
+    spider_emails = SystemToolsManager.parse_spider_json_result(spider_res)
+
+    spider_res2 = SystemToolsManager.spiderfoot("-m sfp_dnsbrute,sfp_dnsresolve,sfp_portscan_tcp -q -o "
+                                                "json -s" + website_address)
+    spider_banner = SystemToolsManager.parse_spider_json_result(spider_res2)
+    GUIModule.spider = SpiderResult(spider_emails, spider_banner)
+
+
 class GUIModule:
     nmap_check_buttons = []
     vars = []
     input_fields = []
-    names = [['TCP Connect', '-sT'], ['Stealth Connect', '-sS'], ['Xmas', '-sX'], ['FIN', '-sF'], ['ACK', '-sA'],
+    names = [['TCP Connect', '-sT'], ['Stealth Connect', ' '], ['Xmas', '-sX'], ['FIN', '-sF'], ['ACK', '-sA'],
              ['NULL', '-sN']]
     search_engines = ['bing', 'google', 'hackertarget', 'netcraft', 'twitter', 'yahoo']
     harvester_check_buttons = []
@@ -211,12 +225,17 @@ class GUIModule:
                 #               fg='white')
                 # label.place(relx=0.25, rely=0.25, relheight=0.5, relwidth=0.5)
                 # Thread(target=self.root.mainloop).start()
+                thread = threading.Thread(target=run_spiderfoot, args=[website_address])
+                thread.start()
+
                 # NMAP
+                print("Run NMAP")
                 result = SystemToolsManager.nmap('-oX - ' + website_address + ' ' + ret)
                 nmap_result = SystemToolsManager.parse_nmap_xml_result(result)
                 #
 
                 # THE_HARVESTER
+                print("Run HARVESTER")
                 ret = SystemToolsManager.the_harvester('-d ' + website_address + ' ' +
                                                        '-l 100 -b ' + opt + ' -f harvest2.xml')
                 result = SystemToolsManager.exec_command('cat', 'harvest2.xml')
@@ -229,22 +248,27 @@ class GUIModule:
                 shodan_result = SystemToolsManager.shodanAPI(website_address)
                 #
                 # # SPIDERFOOT
-                print("Run SPIDERFOOT")
-                spider_res = SystemToolsManager.spiderfoot("-s " + website_address + " -t EMAILADDR -f -x -q -o json")
-                spider_emails = SystemToolsManager.parse_spider_json_result(spider_res)
-
-                spider_res2 = SystemToolsManager.spiderfoot("-m sfp_dnsbrute,sfp_dnsresolve,sfp_portscan_tcp -q -o "
-                                                            "json -s" + website_address)
-                spider_banner = SystemToolsManager.parse_spider_json_result(spider_res2)
-                spider = SpiderResult(spider_emails, spider_banner)
+                # print("Run SPIDERFOOT")
+                # spider_res = SystemToolsManager.spiderfoot("-s " + website_address + " -t EMAILADDR -f -x -q -o json")
+                # spider_emails = SystemToolsManager.parse_spider_json_result(spider_res)
+                #
+                # spider_res2 = SystemToolsManager.spiderfoot("-m sfp_dnsbrute,sfp_dnsresolve,sfp_portscan_tcp -q -o "
+                #                                             "json -s" + website_address)
+                # spider_banner = SystemToolsManager.parse_spider_json_result(spider_res2)
+                # spider = SpiderResult(spider_emails, spider_banner)
                 #
                 # VIRUSTOTAL
                 print("Run VirusTotal")
                 virustotal_result = SystemToolsManager.virustotal(website_address)
                 #
+
+                # wait for thread
+                thread.join()
+
                 # # CREATE HTML FILE WITH ALL RESULTS
                 print("Creating HTML")
-                html_result = prepare_html(org_name=org_name, nmap_result=nmap_result, theharvester_result=theharvester_result,
+                html_result = prepare_html(org_name=org_name, nmap_result=nmap_result,
+                                           theharvester_result=theharvester_result,
                                            virustotal_result=virustotal_result, shodan_result=shodan_result,
-                                           spider_results=spider)
+                                           spider_results=GUIModule.spider)
                 HTTPServer().open_report()

@@ -179,7 +179,7 @@ h4 {
 }
 
 .nmap-ports-protocol {
-    width: 33% !important;
+    width: 32.5% !important;
 }
 
 .nmap-summary {
@@ -210,3 +210,26 @@ h4 {
     width: 40% !important;
 }
 
+.spiderfoot-line {
+    width: 5% !important;
+}
+
+.shodan-first-line {
+    width: 35% !important;
+}
+
+.shodan-second-line {
+    width: 5% !important;
+}
+
+.shodan-third-line {
+    width: 45% !important;
+}
+
+.shodan-fourth-line {
+    width: 2% !important;
+}
+
+.shodan-fifth-line {
+    width: 2% !important;
+}
