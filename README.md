@@ -4,4 +4,4 @@
 
 ##### This is a project made during the Software Security and Penetration Testing course at Warsaw University of Technology.
 
-**Tech Stack:** nbsp;nbsp;nbsp;nbsp; Python / Flask template engine
+**Tech Stack:**     Python / Flask template engine
